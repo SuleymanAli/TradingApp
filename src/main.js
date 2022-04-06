@@ -1,19 +1,23 @@
-import Vue from 'vue'
-import App from './App.vue'
-
+import Vue from "vue";
+import App from "./App.vue";
+import store from "./store";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
+Vue.config.productionTip = false;
 // MOB_DEBUG=true npm run test - Enables mobile debugging
 // (sending console output to the webpack terminal)
 if (MOB_DEBUG) {
-    console.log = debug
-    console.error = debug
-    console.warn = debug
+  console.log = debug;
+  console.error = debug;
+  console.warn = debug;
 }
 
 new Vue({
-  el: '#app',
-  render: h => h(App)
-})
+  el: "#app",
+  render: h => h(App),
+  store
+});
 
 function debug(...argv) {
-    fetch('/debug?argv=' + JSON.stringify(argv))
+  fetch("/debug?argv=" + JSON.stringify(argv));
 }

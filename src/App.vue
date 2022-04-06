@@ -1,55 +1,37 @@
 <template>
-<trading-vue :data="chart" :width="this.width" :height="this.height"
-        :color-back="colors.colorBack"
-        :color-grid="colors.colorGrid"
-        :color-text="colors.colorText">
-</trading-vue>
+  <div>
+    <Header />
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="trading-view">
+            <HomeChart />
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <Symbols />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import TradingVue from './TradingVue.vue'
-import Data from '../data/data.json'
-import DataCube from '../src/helpers/datacube.js'
+import Header from './components/home/Header.vue'
+import HomeChart from './components/home/Chart.vue'
+import Symbols from './components/home/Symbols.vue'
 
 export default {
-    name: 'app',
-    components: {
-        TradingVue
-    },
-    methods: {
-        onResize() {
-            this.width = window.innerWidth
-            this.height = window.innerHeight
-        }
-    },
-    mounted() {
-        window.addEventListener('resize', this.onResize)
-        window.dc = this.chart
-    },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.onResize)
-    },
-    data() {
-        return {
-            chart: new DataCube(Data),
-            width: window.innerWidth,
-            height: window.innerHeight,
-            colors: {
-                colorBack: '#fff',
-                colorGrid: '#eee',
-                colorText: '#333',
-            }
-        };
-    }
-};
+  components: {
+    Header,
+    HomeChart,
+    Symbols,
+  },
+}
 </script>
 
 <style>
-html,
-body {
-    background-color: #000;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+.trading-view {
+  border: 1px solid #ccc;
 }
 </style>
