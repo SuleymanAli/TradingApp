@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  font-family: 'DM Sans';
+  font-style: normal;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: $gray-900;
+  text-decoration: none;
+  transition: .4s all ease;
+
+  &:hover {
+    color: $gray-600;
+  }
+}
+
+p, h1, h2, h3, h4, h5, h6, label, ul {
+  margin-bottom: 0;
+}
+
+select {
+  width: 185px;
+  height: 50px;
+  padding: 12px 24px;
+  border: 1px solid #EAEAEA;
+  border-radius: 40px;
+  background: #FAFAFA;
+  outline: none;
+  font-size: 12px;
+  line-height: 15px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  // background: transparent url('../assets/icons/chevron-down-blue.svg') no-repeat 95% center;
+
+  &:placeholder {
+    color: #BABABA;
+  }
+}
+
+button, input[type="submit"] {
+  background: none;
+  color: $white;
+
+  padding: 12px 21px;
+  box-sizing: border-box;
+  border-radius: 60px;
+  font-size: 14px;
+  line-height: 17px;
+  transition: .4s all ease;
+
+
+  &.buttonWhite {
+    border: 1px solid $white;
+
+    &:hover {
+      background-color: $white;
+      color: $blue;
+    }
+  }
+
+  &.buttonYellowWhite {
+    font-weight: 600;
+    background: $white;
+    color: $yellow;
+    border: 1px solid $white;
+
+    &:hover {
+      background-color: transparent;
+      color: $white;
+    }
+  }
+
+  &.buttonYellow {
+    font-weight: 600;
+    background: $yellow;
+    color: $white;
+    border: 1px solid $yellow;
+
+    &:hover {
+      background-color: transparent;
+      color: $yellow;
+    }
+  }
+
+  &.buttonBlue {
+    font-weight: 600;
+    background: $blue;
+    color: $white;
+    border: 1px solid $blue;
+
+    &:hover {
+      background-color: transparent;
+      color: $blue;
+    }
+  }
+}
+
+.input {
+  position: relative;
+  margin-bottom: 20px;
+
+  img {
+    position: absolute;
+    bottom: 13px;
+    right: 15px;
+  }
+
+  label {
+    font-size: 10px;
+    line-height: 15px;
+    color: $gray;
+  }
+
+  input, textarea {
+    outline: none;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #F0F3F6;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 21px;
+    color: $gray;
+
+  }
+  
+  &--WithIcon {
+    padding: 15px 50px 15px 15px !important;
+  }
+
+  input {
+    height: 50px;
+  }
+}
+
+.alert {
+  &--green {
+    background: #DCF2D4;
+    border-radius: 4px;
+    color: #01731A;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 21px;
+  }
+}

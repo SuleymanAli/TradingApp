@@ -1,0 +1,37 @@
+.topList {
+	&__title {
+		margin-bottom: 24px;
+	}
+
+	.brand {
+		padding: 6px 8px;
+		width: 300px;
+		&__name {
+			text-decoration: uppercase;
+			display: flex;
+		    width: 95px;
+		    flex: 95px;
+		}
+
+		&__price {
+			display: flex;
+			width: 85px;
+			flex: 85;
+		}
+
+		&__priceWithPerc {
+			display: flex;
+			flex: 52;
+			width: 52px;
+
+			&--green {
+				color: $green;
+			}
+
+			&--red {
+				color: $red;
+			}
+		}
+	}
+
+}

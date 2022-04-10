@@ -1,44 +1,34 @@
 <template>
   <ul class="list-group">
-    <!-- TESLA:TSLA  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('TSLA')">TESLA</li>
-    <!-- NVIDIA:NVDA  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('NVDA')">NVIDIA</li>
-    <!-- TWITTER:TWTR  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('TWTR')">
-      TWITTER
+    <li
+      v-for="(ticker, index) in getSnapshots.tickers"
+      :key="index"
+      class="list-group-item"
+      @click="changeSymbolOnChart(ticker.ticker)"
+    >
+      {{ ticker.ticker }}
+      {{ ticker.todaysChangePerc }}
+      {{ ticker.todaysChange }}
     </li>
-    <!-- Facebook:FB  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('FB')">Facebook</li>
-    <!-- MICROSOFT:MSFT  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('MSFT')">
-      MICROSOFT
-    </li>
-    <!-- AMAZON:AMZN  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('AMZN')">AMAZON</li>
-    <!-- NETFLIX:NFLX  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('NFLX')">
-      NETFLIX
-    </li>
-    <!-- PAYPAL:PYPL  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('PYPL')">PAYPAL</li>
-    <!-- GOOGLE:GOOGL  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('GOOG')">
-      GOOGLE
-    </li>
-    <!-- AMD:AMD  -->
-    <li class="list-group-item" @click="changeSymbolOnChart('AMD')">AMD</li>
   </ul>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+  computed: {
+    ...mapGetters(['getSnapshots']),
+  },
+  async mounted() {
+    await this.$store.dispatch('fetchTicketAllSnapshot')
+    console.log(this.getSnapshots)
+  },
   methods: {
     changeSymbolOnChart(symbol) {
       console.log(symbol)
-      this.$store.commit('changeSymbol', symbol)
-      this.$store.dispatch('fetchData')
-      // window.location.reload()
+      this.$store.commit('changeTickerName', symbol)
+      this.$store.dispatch('fetchTickerRangeData')
     },
   },
 }
@@ -47,5 +37,8 @@ export default {
 <style scoped>
 .list-group {
   cursor: pointer;
+  width: 50vw;
+  height: 50vh;
+  overflow-y: scroll;
 }
 </style>

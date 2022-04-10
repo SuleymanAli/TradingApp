@@ -1,0 +1,14 @@
+.list {
+	.table>:not(:first-child) {
+		border-top: none;
+	}
+
+	thead {
+		background-color: #FAFAFA;
+		border-radius: 16px;
+
+		tr th {
+			border: none;
+		}
+	}
+}

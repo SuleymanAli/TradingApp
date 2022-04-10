@@ -1,0 +1,25 @@
+.header {
+	height: 70px;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+	
+	&__logo {
+		a {
+			display: block;
+			font-size: 18px;
+			
+			svg {
+
+			}
+		}
+	}
+
+	&__nav {
+
+	}
+
+	&__auth {
+
+	}
+}

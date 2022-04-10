@@ -5,38 +5,54 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    data: [],
-    symbol: "AAPL",
+    tickerData: [],
+    tickerName: "AAPL",
     multiplier: 1,
     timespan: "hour",
     timeRangeFrom: "",
-    timeRangeTo: ""
+    timeRangeTo: "",
+    snapshotAll: []
   },
   getters: {
-    getAllData(state) {
-      return state.data;
+    getTickerData(state) {
+      return state.tickerData;
+    },
+    getSnapshots(state) {
+      return state.snapshotAll;
     }
   },
   mutations: {
-    setData(state, payload) {
+    setTickerData(state, payload) {
+      console.log(payload);
       let rawData = payload.map(obj => {
         return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
       });
 
-      let injectedData = { ohlcv: rawData };
-      state.data = injectedData;
+      // let injectedData = { ohlcv: rawData };
+      state.tickerData = rawData;
     },
-    changeSymbol(state, payload) {
-      state.symbol = payload;
+    changeTickerName(state, payload) {
+      state.tickerName = payload;
+    },
+    setSnapshots(state, payload) {
+      state.snapshotAll = payload;
     }
   },
   actions: {
-    async fetchData(context, payload) {
+    async fetchTickerRangeData(context, payload) {
       await axios
         .get(
-          `https://api.polygon.io/v2/aggs/ticker/${context.state.symbol}/range/1/hour/2020-06-13/2020-06-17?apiKey=dVbLOR_E5VOmZ7R2dyfbToXkqeq8WCDP`
+          `https://api.polygon.io/v2/aggs/ticker/${context.state.tickerName}/range/1/hour/2020-06-13/2020-06-17?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
         )
-        .then(res => context.commit("setData", res.data.results))
+        .then(res => context.commit("setTickerData", res.data.results))
+        .catch(e => console.log(e));
+    },
+    async fetchTicketAllSnapshot(context, payload) {
+      await axios
+        .get(
+          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?tickers=AAPL,PYPL,NVDA,FB,AMZN,TWTR,SHOP,TSLA,AMD,QQQ,GOOGL,SPY,ABNB,&apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
+        )
+        .then(res => context.commit("setSnapshots", res.data))
         .catch(e => console.log(e));
     }
   },
