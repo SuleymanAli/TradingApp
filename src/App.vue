@@ -26,15 +26,13 @@
     </div> -->
   <!-- <Test /> -->
 
-  <div id="app">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <script>
 import Header from './components/home/Header.vue'
-import HomeChart from './components/home/Chart.vue'
-import Symbols from './components/home/Symbols.vue'
+import HomeChart from './components/trade/Chart.vue'
+import Symbols from './components/trade/Symbols.vue'
 import RealTimeChart from '../test/tests/DataHelper.vue'
 import Test from '../test/Test.vue'
 import TradingVue from './TradingVue.vue'

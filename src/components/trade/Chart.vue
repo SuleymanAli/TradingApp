@@ -5,6 +5,7 @@
       :data="chart"
       :width="this.width"
       :height="this.height"
+      :titleTxt="getTickerName"
       :chart-config="{ MIN_ZOOM: 1 }"
       ref="tvjs"
       :toolbar="true"
@@ -54,13 +55,13 @@ export default {
         ? { colorBack: '#fff', colorGrid: '#eee', colorText: '#333' }
         : {}
     },
-    ...mapGetters(['getTickerData']),
+    ...mapGetters(['getTickerData', 'getTickerName']),
     computed: {
       cbox_width() {
-        return Math.floor(this.width / 2 - 1)
+        return Math.floor(this.width / 3 - 1)
       },
       cbox_height() {
-        return Math.floor(this.height / 2 - 1)
+        return Math.floor(this.height / 4 - 1)
       },
     },
   },

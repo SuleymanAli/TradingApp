@@ -1,39 +1,16 @@
 <template>
   <div>
-    <div class="container-fluid trade">
-      <div class="row">
+    <div class="container-fluid px-0 trade">
+      <div class="row g-0">
         <div class="col-lg-3">
-          <div class="trade__list">
-            <table class="table table-dark">
-              <thead>
-                <tr>
-                  <th><p class="font-caption">Symbol</p></th>
-                  <th><p class="font-caption">Last</p></th>
-                  <th><p class="font-caption">Chg</p></th>
-                  <th><p class="font-caption">Chg%</p></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>BTC</td>
-                  <td>42701</td>
-                  <td>-66.45</td>
-                  <td>-0.16</td>
-                </tr>
-                <tr>
-                  <td>BTC</td>
-                  <td>42701</td>
-                  <td>-66.45</td>
-                  <td>-0.16</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <Symbols />
         </div>
-        <div class="col-lg-6 bg-dark"></div>
-        <div class="col-lg-3">
+        <div class="col-lg-9 bg-dark">
+          <Chart />
+        </div>
+        <div class="col-lg-12">
           <div class="trade__orderBook">
-            <table class="table table-dark">
+            <table class="table table-dark mb-0">
               <thead>
                 <tr>
                   <th><p class="font-caption">Symbol</p></th>
@@ -65,7 +42,7 @@
 </template>
 
 <script>
-export default {}
+import Chart from '../components/trade/Chart.vue'
+import Symbols from '../components/trade/Symbols.vue'
+export default { components: { Chart, Symbols } }
 </script>
-
-<style></style>
