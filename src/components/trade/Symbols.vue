@@ -40,13 +40,10 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('fetchTicketAllSnapshot')
-    console.log(this.getSnapshots)
   },
   methods: {
     changeSymbolOnChart(symbol) {
-      console.log(symbol)
-      this.$store.commit('changeTickerName', symbol)
-      this.$store.dispatch('fetchTickerRangeData')
+      this.$store.dispatch('fetchTickerRangeData', symbol)
     },
   },
 }

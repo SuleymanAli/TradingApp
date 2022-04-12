@@ -68,10 +68,7 @@ export default {
   methods: {
     goToCurrentTicker(symbol) {
       console.log(symbol)
-      this.$store.commit('changeTickerName', symbol)
-      this.$store
-        .dispatch('fetchTickerRangeData')
-        .then(() => this.$router.push('/trade'))
+      this.$router.push({ path: '/trade', query: { symbol } })
     },
   },
 }

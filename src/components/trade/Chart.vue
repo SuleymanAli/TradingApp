@@ -27,6 +27,9 @@ import Stream from '../../../test/tests/DataHelper/stream.js'
 import ScriptOverlay from '../../../test/tests/Scripts/EMAx6.vue'
 import BSB from '../../../test/tests/Scripts/BuySellBalance.vue'
 import { mapGetters } from 'vuex'
+import { Overlay } from '../../mixins/overlay'
+import { Tool } from '../../mixins/tool'
+
 // Gettin' data through webpeck proxy
 const PORT = location.port
 const URL = `http://localhost:${PORT}/api/v3/klines?symbol=`
@@ -113,7 +116,7 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('fetchTickerRangeData')
+    await this.$store.dispatch('fetchTickerRangeData', this.$route.query.symbol)
     window.addEventListener('resize', this.onResize)
     this.onResize()
 

@@ -3,10 +3,10 @@
     <div class="container-fluid px-0 trade">
       <div class="row g-0">
         <div class="col-lg-3">
-          <Symbols />
+          <!-- <Symbols /> -->
         </div>
         <div class="col-lg-9 bg-dark">
-          <Chart />
+          <!-- <Chart /> -->
         </div>
         <div class="col-lg-12">
           <div class="trade__orderBook">
@@ -44,5 +44,16 @@
 <script>
 import Chart from '../components/trade/Chart.vue'
 import Symbols from '../components/trade/Symbols.vue'
-export default { components: { Chart, Symbols } }
+
+export default {
+  components: { Chart, Symbols },
+  mounted() {},
+  methods: {
+    // checkUrlQueryForSymbol() {
+    //   if (this.$route.query.symbol.length > 0) {
+    //     console.log(this.$route.query.symbol)
+    //   }
+    // },
+  },
+}
 </script>

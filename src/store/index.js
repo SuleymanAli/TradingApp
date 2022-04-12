@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import socket from "./socket";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -13,7 +15,7 @@ export default new Vuex.Store({
     timeRangeTo: "",
     snapshotAll: [],
     gainers: [],
-    losers: []
+    losers: [],
   },
   getters: {
     getTickerData(state) {
@@ -30,12 +32,12 @@ export default new Vuex.Store({
     },
     getLosers(state) {
       return state.losers;
-    }
+    },
   },
   mutations: {
     setTickerData(state, payload) {
       console.log(payload);
-      let rawData = payload.map(obj => {
+      let rawData = payload.map((obj) => {
         return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
       });
 
@@ -53,41 +55,44 @@ export default new Vuex.Store({
     },
     setLosers(state, payload) {
       state.losers = payload;
-    }
+    },
   },
   actions: {
     async fetchTickerRangeData(context, payload) {
+      console.log(payload);
+      await context.commit("changeTickerName", payload);
+
       await axios
         .get(
           `https://api.polygon.io/v2/aggs/ticker/${context.state.tickerName}/range/1/hour/2020-06-13/2020-06-17?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
         )
-        .then(res => context.commit("setTickerData", res.data.results))
-        .catch(e => console.log(e));
+        .then((res) => context.commit("setTickerData", res.data.results))
+        .catch((e) => console.log(e));
     },
     async fetchTicketAllSnapshot(context, payload) {
       await axios
         .get(
           `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?tickers=AAPL,PYPL,NVDA,FB,AMZN,TWTR,SHOP,TSLA,AMD,QQQ,GOOGL,SPY,ABNB,&apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
         )
-        .then(res => context.commit("setSnapshots", res.data))
-        .catch(e => console.log(e));
+        .then((res) => context.commit("setSnapshots", res.data))
+        .catch((e) => console.log(e));
     },
     async fetchGainers(context, payload) {
       await axios
         .get(
           `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/gainers?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
         )
-        .then(res => context.commit("setGainers", res.data))
-        .catch(e => console.log(e));
+        .then((res) => context.commit("setGainers", res.data))
+        .catch((e) => console.log(e));
     },
     async fetchLosers(context, payload) {
       await axios
         .get(
           `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/losers?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
         )
-        .then(res => context.commit("setLosers", res.data))
-        .catch(e => console.log(e));
-    }
+        .then((res) => context.commit("setLosers", res.data))
+        .catch((e) => console.log(e));
+    },
   },
-  modules: {}
+  modules: { socket },
 });

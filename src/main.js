@@ -5,6 +5,22 @@ import router from "./router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "../assets/scss/main.scss";
+import VueSocketIO from "vue-socket.io";
+import SocketIO from "socket.io-client";
+const socketConnection = SocketIO("wss://polyfeed.polygon.io/stocks");
+
+Vue.use(
+  new VueSocketIO({
+    debug: true,
+    connection: socketConnection,
+    vuex: {
+      store,
+      actionPrefix: "SOCKET_",
+      mutationPrefix: "SOCKET_",
+    },
+    options: { transports: ["websocket"] }, //Optional options
+  })
+);
 
 Vue.config.productionTip = false;
 // MOB_DEBUG=true npm run test - Enables mobile debugging
@@ -17,9 +33,9 @@ if (MOB_DEBUG) {
 
 new Vue({
   el: "#app",
-  render: h => h(App),
+  render: (h) => h(App),
   store,
-  router
+  router,
 });
 
 function debug(...argv) {
