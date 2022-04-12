@@ -1,11 +1,11 @@
 <template>
-  <!-- <keep-alive> -->
-  <!-- <router-view /> -->
-  <div>
+  <keep-alive>
+    <router-view />
+    <!-- <div>
     <button class="blue" @click="uns">Uns</button>
     <button class="blue" @click="sbs">sub</button>
-  </div>
-  <!-- </keep-alive> -->
+  </div> -->
+  </keep-alive>
 </template>
 
 <script>

@@ -3,10 +3,10 @@
     <div class="container-fluid px-0 trade">
       <div class="row g-0">
         <div class="col-lg-3">
-          <!-- <Symbols /> -->
+          <Symbols />
         </div>
         <div class="col-lg-9 bg-dark">
-          <!-- <Chart /> -->
+          <Chart />
         </div>
         <div class="col-lg-12">
           <div class="trade__orderBook">

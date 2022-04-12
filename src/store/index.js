@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import socket from "./socket";
 
 Vue.use(Vuex);
 
@@ -94,5 +93,5 @@ export default new Vuex.Store({
         .catch((e) => console.log(e));
     },
   },
-  modules: { socket },
+  modules: {},
 });
