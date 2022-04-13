@@ -15,6 +15,7 @@ export default new Vuex.Store({
     snapshotAll: [],
     gainers: [],
     losers: [],
+    groupedDaily: {}
   },
   getters: {
     getTickerData(state) {
@@ -32,10 +33,12 @@ export default new Vuex.Store({
     getLosers(state) {
       return state.losers;
     },
+    getGroupedDaily(state) {
+      return state.groupedDaily;
+    },
   },
   mutations: {
     setTickerData(state, payload) {
-      console.log(payload);
       let rawData = payload.map((obj) => {
         return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
       });
@@ -55,6 +58,9 @@ export default new Vuex.Store({
     setLosers(state, payload) {
       state.losers = payload;
     },
+    setGroupedDaily(state, payload) {
+      state.groupedDaily = payload;
+    },
   },
   actions: {
     async fetchTickerRangeData(context, payload) {
@@ -71,7 +77,7 @@ export default new Vuex.Store({
     async fetchTicketAllSnapshot(context, payload) {
       await axios
         .get(
-          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?tickers=AAPL,PYPL,NVDA,FB,AMZN,TWTR,SHOP,TSLA,AMD,QQQ,GOOGL,SPY,ABNB,&apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
+          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
         )
         .then((res) => context.commit("setSnapshots", res.data))
         .catch((e) => console.log(e));
@@ -90,6 +96,16 @@ export default new Vuex.Store({
           `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/losers?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
         )
         .then((res) => context.commit("setLosers", res.data))
+        .catch((e) => console.log(e));
+    },
+    async fetchGroupedDaily({commit}, payload) {
+      await axios.get(`https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/${payload.date}?adjusted=true&apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`)
+        .then((res) => {
+          if(res.status === 200){
+            commit('setGroupedDaily',res.data)
+          }
+          // context.commit("setLosers", res.data)
+        })
         .catch((e) => console.log(e));
     },
   },

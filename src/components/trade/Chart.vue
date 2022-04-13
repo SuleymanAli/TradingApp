@@ -1,7 +1,6 @@
 <template>
   <!-- Real time data example -->
-  <span>
-    <trading-vue
+  <trading-vue
       :data="chart"
       :width="this.width"
       :height="this.height"
@@ -13,9 +12,8 @@
       :color-back="colors.colorBack"
       :color-grid="colors.colorGrid"
       :color-text="colors.colorText"
-    >
-    </trading-vue>
-  </span>
+  >
+  </trading-vue>
 </template>
 
 <script>
@@ -59,13 +57,11 @@ export default {
         : {}
     },
     ...mapGetters(['getTickerData', 'getTickerName']),
-    computed: {
-      cbox_width() {
-        return Math.floor(this.width / 3 - 1)
-      },
-      cbox_height() {
-        return Math.floor(this.height / 4 - 1)
-      },
+    cbox_width() {
+      return Math.floor(this.width / 3 - 1)
+    },
+    cbox_height() {
+      return Math.floor(this.height / 4 - 1)
     },
   },
   watch: {
@@ -161,9 +157,11 @@ export default {
     })
   },
   methods: {
-    onResize(event) {
-      this.width = window.innerWidth / 2 - 1
-      this.height = window.innerHeight / 2 - 1
+    onResize() {
+      // this.width = window.innerWidth / 2 - 1
+      // this.height = window.innerHeight / 2 - 1
+      this.width = document.querySelector('.chart').clientWidth + 16
+      this.height = document.querySelector('.chart').clientHeight - 3
     },
     // New data handler. Should return Promise, or
     // use callback: load_chunk(range, tf, callback)
@@ -197,7 +195,7 @@ export default {
       }
     },
     on_trades(trade) {
-      console.log('trade', trade)
+      // console.log('trade', trade)
       // this.chart.update({
       //   t: trade.T, // Exchange time (optional)
       //   price: parseFloat(trade.p), // Trade price
@@ -219,3 +217,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.trading-vue-js {
+  width: 100% !important;
+  height: 100% !important;
+}
+</style>

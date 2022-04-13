@@ -12,13 +12,13 @@ export default function Stream(url, subscribeParams = "", source = "polygon") {
       if (subscribeParams.length > 0) {
         ws.send(`{"action":"subscribe", "params":"${subscribeParams}"}`);
       }
-      console.log("...");
+      // console.log("...");
     };
   }
   ws.onmessage = function(data) {
     try {
       data = JSON.parse(data.data);
-      console.log(data);
+      // console.log(data);
       cb(data);
     } catch (e) {
       console.log(e);

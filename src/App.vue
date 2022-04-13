@@ -19,11 +19,11 @@ export default {
     this.stream = new Stream()
     this.stream.subscribe('Q.*')
 
-    console.log(this.stream)
+    // console.log(this.stream)
   },
   methods: {
     uns() {
-      console.log(this.stream)
+      // console.log(this.stream)
       this.stream.unsubscribe('Q.*')
     },
     sbs() {

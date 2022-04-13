@@ -25,10 +25,10 @@ export default function Stream(
   ws.onmessage = function (data) {
     try {
       data = JSON.parse(data.data);
-      console.log(data);
+      // console.log(data);
       cb(data);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
 

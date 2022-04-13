@@ -1,43 +1,21 @@
 <template>
-  <div>
-    <div class="container-fluid px-0 trade">
-      <div class="row g-0">
-        <div class="col-lg-3">
-          <Symbols />
-        </div>
-        <div class="col-lg-9 bg-dark">
-          <Chart />
-        </div>
-        <div class="col-lg-12">
-          <div class="trade__orderBook">
-            <table class="table table-dark mb-0">
-              <thead>
-                <tr>
-                  <th><p class="font-caption">Symbol</p></th>
-                  <th><p class="font-caption">Last</p></th>
-                  <th><p class="font-caption">Chg</p></th>
-                  <th><p class="font-caption">Chg%</p></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>BTC</td>
-                  <td>42701</td>
-                  <td>-66.45</td>
-                  <td>-0.16</td>
-                </tr>
-                <tr>
-                  <td>BTC</td>
-                  <td>42701</td>
-                  <td>-66.45</td>
-                  <td>-0.16</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+  <div class="container-fluid px-0 trade">
+    <div class="inner-layout">
+      <div class="sidebar">
+        <Symbols />
+      </div>
+      <div class="chart">
+        <Chart />
       </div>
     </div>
+<!--      <div class="row g-0">-->
+<!--        <div class="col-lg-3">-->
+<!--          <Symbols />-->
+<!--        </div>-->
+<!--        <div class="col-lg-9 bg-dark">-->
+<!--          <Chart />-->
+<!--        </div>-->
+<!--      </div>-->
   </div>
 </template>
 
@@ -57,3 +35,39 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.inner-layout {
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  background-color: #212529;
+
+  .sidebar {
+    width: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: #444444;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+  }
+
+  .chart {
+    overflow: hidden;
+    width: calc(100% - 300px);
+  }
+}
+</style>
