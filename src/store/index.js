@@ -39,12 +39,14 @@ export default new Vuex.Store({
   },
   mutations: {
     setTickerData(state, payload) {
-      let rawData = payload.map((obj) => {
-        return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
-      });
+      if(payload && payload.length > 0){
+        let rawData = payload.map((obj) => {
+          return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
+        });
 
-      // let injectedData = { ohlcv: rawData };
-      state.tickerData = rawData;
+        // let injectedData = { ohlcv: rawData };
+        state.tickerData = rawData;
+      }
     },
     changeTickerName(state, payload) {
       state.tickerName = payload;
@@ -61,6 +63,20 @@ export default new Vuex.Store({
     setGroupedDaily(state, payload) {
       state.groupedDaily = payload;
     },
+    updateGroupedDaily(state, payload){
+      if(state.groupedDaily && state.groupedDaily.results){
+        let stockIndex = state.groupedDaily.results.findIndex(stock => stock.T === payload.sym);
+
+        if(stockIndex != -1){
+          // Vue.$set(state.groupedDaily.results[stockIndex],'vw',payload.vw);
+          // Vue.$set(state.groupedDaily.results[stockIndex],'ss',payload.v);
+
+          state.groupedDaily.results[stockIndex].vw = payload.vw
+          state.groupedDaily.results[stockIndex].v = payload.v
+          state.groupedDaily.results[stockIndex] = JSON.parse(JSON.stringify(state.groupedDaily.results[stockIndex]))
+        }
+      }
+    }
   },
   actions: {
     async fetchTickerRangeData(context, payload) {

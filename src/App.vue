@@ -1,10 +1,6 @@
 <template>
   <keep-alive>
     <router-view />
-    <!-- <div>
-    <button class="blue" @click="uns">Uns</button>
-    <button class="blue" @click="sbs">sub</button>
-  </div> -->
   </keep-alive>
 </template>
 
@@ -16,20 +12,19 @@ export default {
     stream: null,
   }),
   mounted() {
-    this.stream = new Stream()
-    this.stream.subscribe('Q.*')
+    this.stream = new Stream();
+    this.stream.subscribe('A.*')
 
-    // console.log(this.stream)
+    this.stream.ontrades = this.on_trades
   },
   methods: {
-    uns() {
-      // console.log(this.stream)
-      this.stream.unsubscribe('Q.*')
-    },
-    sbs() {
-      // console.log(this.stream)
-      this.stream.subscribe('AAPL.*')
-    },
+    on_trades(trade) {
+      if(trade){
+        trade.forEach(item => {
+          this.$store.commit('updateGroupedDaily', item)
+        })
+      }
+    }
   },
 }
 </script>

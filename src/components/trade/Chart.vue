@@ -104,8 +104,8 @@ export default {
         // Register onrange callback & And a stream of trades
         this.chart.onrange(this.load_chunk)
         this.$refs.tvjs.resetChart()
-        this.stream = new Stream(WSS, 'T.AAPL')
-        this.stream.ontrades = this.on_trades
+        // this.stream = new Stream(WSS, 'T.AAPL')
+        // this.stream.ontrades = this.on_trades
         window.dc = this.chart // Debug
         window.tv = this.$refs.tvjs // Debug
       })
@@ -150,8 +150,8 @@ export default {
       // Register onrange callback & And a stream of trades
       this.chart.onrange(this.load_chunk)
       this.$refs.tvjs.resetChart()
-      this.stream = new Stream(WSS, 'T.AAPL')
-      this.stream.ontrades = this.on_trades
+      // this.stream = new Stream(WSS, 'T.AAPL')
+      // this.stream.ontrades = this.on_trades
       window.dc = this.chart // Debug
       window.tv = this.$refs.tvjs // Debug
     })
