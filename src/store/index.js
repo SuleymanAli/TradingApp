@@ -4,6 +4,9 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
+const BASE_URL = 'https://api.polygon.io/v2';
+const API_KEY = 'yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy';
+
 export default new Vuex.Store({
   state: {
     tickerData: [],
@@ -67,13 +70,10 @@ export default new Vuex.Store({
       if(state.groupedDaily && state.groupedDaily.results){
         let stockIndex = state.groupedDaily.results.findIndex(stock => stock.T === payload.sym);
 
-        if(stockIndex != -1){
-          // Vue.$set(state.groupedDaily.results[stockIndex],'vw',payload.vw);
-          // Vue.$set(state.groupedDaily.results[stockIndex],'ss',payload.v);
-
-          state.groupedDaily.results[stockIndex].vw = payload.vw
-          state.groupedDaily.results[stockIndex].v = payload.v
-          state.groupedDaily.results[stockIndex] = JSON.parse(JSON.stringify(state.groupedDaily.results[stockIndex]))
+        if(stockIndex !== -1){
+          Vue.set(state.groupedDaily.results[stockIndex],'vw',payload.vw);
+          Vue.set(state.groupedDaily.results[stockIndex],'v',payload.v);
+          Vue.set(state.groupedDaily.results[stockIndex],'o',payload.o);
         }
       }
     }
@@ -85,7 +85,7 @@ export default new Vuex.Store({
 
       await axios
         .get(
-          `https://api.polygon.io/v2/aggs/ticker/${context.state.tickerName}/range/1/hour/2020-06-13/2020-06-17?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
+          `${BASE_URL}/aggs/ticker/${context.state.tickerName}/range/1/hour/2020-06-13/2020-06-17?apiKey=${API_KEY}`
         )
         .then((res) => context.commit("setTickerData", res.data.results))
         .catch((e) => console.log(e));
@@ -93,7 +93,7 @@ export default new Vuex.Store({
     async fetchTicketAllSnapshot(context, payload) {
       await axios
         .get(
-          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
+          `${BASE_URL}/snapshot/locale/us/markets/stocks/tickers?apiKey=${API_KEY}`
         )
         .then((res) => context.commit("setSnapshots", res.data))
         .catch((e) => console.log(e));
@@ -101,7 +101,7 @@ export default new Vuex.Store({
     async fetchGainers(context, payload) {
       await axios
         .get(
-          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/gainers?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
+          `${BASE_URL}/snapshot/locale/us/markets/stocks/gainers?apiKey=${API_KEY}`
         )
         .then((res) => context.commit("setGainers", res.data))
         .catch((e) => console.log(e));
@@ -109,18 +109,17 @@ export default new Vuex.Store({
     async fetchLosers(context, payload) {
       await axios
         .get(
-          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/losers?apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`
+          `${BASE_URL}/snapshot/locale/us/markets/stocks/losers?apiKey=${API_KEY}`
         )
         .then((res) => context.commit("setLosers", res.data))
         .catch((e) => console.log(e));
     },
     async fetchGroupedDaily({commit}, payload) {
-      await axios.get(`https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/${payload.date}?adjusted=true&apiKey=yrCiFAvpCU41Sq6cN0FI2lj0nohWNqJy`)
+      await axios.get(`${BASE_URL}/aggs/grouped/locale/us/market/stocks/${payload.date}?adjusted=true&apiKey=${API_KEY}`)
         .then((res) => {
           if(res.status === 200){
             commit('setGroupedDaily',res.data)
           }
-          // context.commit("setLosers", res.data)
         })
         .catch((e) => console.log(e));
     },

@@ -9,16 +9,22 @@
       </tr>
       </thead>
       <tbody>
-      <tr
+<!--      <tr-->
+<!--          v-for="(stock, index) in stocks.results"-->
+<!--          :key="index"-->
+<!--          @click="changeSymbolOnChart(stock.T)"-->
+<!--          style="cursor:pointer;"-->
+<!--      >-->
+<!--        <td>{{ stock.T }}</td>-->
+<!--        <td>{{ stock.vw }}</td>-->
+<!--        <td>{{ stock.v }}</td>-->
+<!--      </tr>-->
+      <SymbolItem
           v-for="(stock, index) in stocks.results"
           :key="index"
-          @click="changeSymbolOnChart(stock.T)"
-          style="cursor:pointer;"
-      >
-        <td>{{ stock.T }}</td>
-        <td>{{ stock.vw }}</td>
-        <td>{{ stock.v }}</td>
-      </tr>
+          :stock="stock"
+          @change="changeSymbolOnChart(stock.T)"
+      />
       </tbody>
     </table>
     <div class="loading" v-if="loading">
@@ -52,18 +58,22 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from "moment";
+import SymbolItem from "./SymbolItem.vue";
 
 export default {
-  computed: {
-    ...mapGetters(['getSnapshots']),
-    ...mapGetters({
-      stocks: 'getGroupedDaily'
-    }),
+  components: {
+    SymbolItem
   },
   data(){
     return {
       loading: false
     }
+  },
+  computed: {
+    // ...mapGetters(['getSnapshots']),
+    ...mapGetters({
+      stocks: 'getGroupedDaily'
+    }),
   },
   async mounted() {
     // let today = moment().format("YYYY-MM-DD");
@@ -88,9 +98,6 @@ export default {
 </script>
 
 <style scoped>
-/* .trade__list {
-  background-color: #212529;
-} */
 .list-group {
   cursor: pointer;
   width: 50vw;

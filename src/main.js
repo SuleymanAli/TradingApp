@@ -6,6 +6,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "../assets/scss/main.scss";
 
+// import Stream from './helpers/stream'
+//
+// Vue.prototype.stream = new Stream();
+
 Vue.config.productionTip = false;
 // MOB_DEBUG=true npm run test - Enables mobile debugging
 // (sending console output to the webpack terminal)
