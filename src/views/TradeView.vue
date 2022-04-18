@@ -8,14 +8,6 @@
         <Chart />
       </div>
     </div>
-<!--      <div class="row g-0">-->
-<!--        <div class="col-lg-3">-->
-<!--          <Symbols />-->
-<!--        </div>-->
-<!--        <div class="col-lg-9 bg-dark">-->
-<!--          <Chart />-->
-<!--        </div>-->
-<!--      </div>-->
   </div>
 </template>
 
@@ -29,6 +21,13 @@ export default {
   data: () => ({
     stream: null,
   }),
+  watch: {
+    $route(){
+      if(this.$route.query.symbol) {
+        this.$store.dispatch('fetchTickerRangeData', this.$route.query.symbol)
+      }
+    }
+  },
   mounted() {
     this.stream = new Stream();
     this.stream.subscribe('A.*')

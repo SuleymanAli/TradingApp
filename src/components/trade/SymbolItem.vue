@@ -1,8 +1,8 @@
 <template>
   <tr @click="$emit('change', stock.T)">
     <td>{{ stock.T }}</td>
-    <td :class="vw">{{ stock.vw }}</td>
-    <td :class="v">{{ calcOpeningAverageP }}</td>
+    <td :class="price">{{ stock.vw }}</td>
+    <td :class="net_chg">{{ calcNetChg }}</td>
   </tr>
 </template>
 
@@ -19,20 +19,20 @@ export default {
   },
   data(){
     return {
-      v: null,
-      vw: null
+      price: null,
+      net_chg: null
     }
   },
   computed:{
     clonedStock: function(){
       return JSON.parse(JSON.stringify(this.stock))
     },
-    calcOpeningAverageP(){
-      if(this.stock.o && this.stock.vw) return this.stock.o - this.stock.vw;
+    calcNetChg(){
+      if(this.stock.o && this.stock.vw) return (this.stock.o - this.stock.vw).toFixed(4);
     },
-    clonedOpeningAverageP(){
-      if(!isNaN(this.calcOpeningAverageP)){
-        return JSON.parse(JSON.stringify(this.calcOpeningAverageP))
+    clonedNetChg(){
+      if(!isNaN(this.calcNetChg)){
+        return JSON.parse(JSON.stringify(this.calcNetChg))
       }
     }
   },
@@ -40,39 +40,39 @@ export default {
     clonedStock: {
       handler(newVal, oldVal){
         if(newVal.vw >= oldVal.vw){
-          this.vw = 'green'
+          this.price = 'green'
           setTimeout(() => {
-            this.vw = null
+            this.price = null
           }, 1500)
         }
         else if(newVal.vw <= oldVal.vw){
-          this.vw = 'red'
+          this.price = 'red'
           setTimeout(() => {
-            this.vw = null
+            this.price = null
           }, 1500)
         }
         else {
-          this.vw = null
+          this.price = null
         }
       },
       deep: true
     },
-    clonedOpeningAverageP: {
+    clonedNetChg: {
       handler(newVal, oldVal){
         if(newVal >= oldVal){
-          this.v = 'green'
+          this.net_chg = 'green'
           setTimeout(() => {
-            this.v = null
+            this.net_chg = null
           }, 1500)
         }
         else if(newVal <= oldVal){
-          this.v = 'red'
+          this.net_chg = 'red'
           setTimeout(() => {
-            this.v = null
+            this.net_chg = null
           }, 1500)
         }
         else {
-          this.v = null
+          this.net_chg = null
         }
       },
       deep: true

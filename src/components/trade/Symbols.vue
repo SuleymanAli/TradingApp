@@ -4,21 +4,11 @@
       <thead>
       <tr>
         <th><p class="font-caption">Symbol</p></th>
-        <th><p class="font-caption">VW</p></th>
-        <th><p class="font-caption">Vol</p></th>
+        <th><p class="font-caption">Price</p></th>
+        <th><p class="font-caption">Net Change</p></th>
       </tr>
       </thead>
       <tbody>
-<!--      <tr-->
-<!--          v-for="(stock, index) in stocks.results"-->
-<!--          :key="index"-->
-<!--          @click="changeSymbolOnChart(stock.T)"-->
-<!--          style="cursor:pointer;"-->
-<!--      >-->
-<!--        <td>{{ stock.T }}</td>-->
-<!--        <td>{{ stock.vw }}</td>-->
-<!--        <td>{{ stock.v }}</td>-->
-<!--      </tr>-->
       <SymbolItem
           v-for="(stock, index) in stocks.results"
           :key="index"
@@ -30,28 +20,6 @@
     <div class="loading" v-if="loading">
       <img src="assets/loading.gif" alt="loading">
     </div>
-<!--    <table class="table table-dark mb-0">-->
-<!--      <thead>-->
-<!--        <tr>-->
-<!--          <th><p class="font-caption">Symbol</p></th>-->
-<!--          <th><p class="font-caption">Last</p></th>-->
-<!--          <th><p class="font-caption">Chg</p></th>-->
-<!--          <th><p class="font-caption">Chg%</p></th>-->
-<!--        </tr>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--        <tr-->
-<!--          v-for="(ticker, index) in getSnapshots.tickers"-->
-<!--          :key="index"-->
-<!--          @click="changeSymbolOnChart(ticker.ticker)"-->
-<!--        >-->
-<!--          <td>{{ ticker.ticker }}</td>-->
-<!--          <td>42701</td>-->
-<!--          <td>{{ ticker.todaysChangePerc }}</td>-->
-<!--          <td>{{ ticker.todaysChange }}</td>-->
-<!--        </tr>-->
-<!--      </tbody>-->
-<!--    </table>-->
   </div>
 </template>
 
@@ -70,7 +38,6 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters(['getSnapshots']),
     ...mapGetters({
       stocks: 'getGroupedDaily'
     }),
@@ -80,18 +47,16 @@ export default {
     this.loading = true
     let yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD")
     try {
-      await this.$store.dispatch('fetchGroupedDaily',{date: yesterday})
+      await this.$store.dispatch('fetchGroupedDaily',{date: '2022-04-14'})
       this.loading = false
     }
     catch (e){
       this.loading = false
     }
-
-    // await this.$store.dispatch('fetchTicketAllSnapshot')
   },
   methods: {
     changeSymbolOnChart(symbol) {
-      this.$store.dispatch('fetchTickerRangeData', symbol)
+      this.$router.push({path: '/trade', query: {symbol}})
     },
   },
 }
