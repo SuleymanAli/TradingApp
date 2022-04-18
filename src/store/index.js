@@ -160,7 +160,7 @@ export default new Vuex.Store({
         .catch((e) => console.log(e));
     },
     async fetchChartData({commit}, payload){
-      await axios.get(`${BASE_URL}/aggs/ticker/${payload.symbol}/range/${payload.multiplier}/${payload.timespan}/${payload.from}/${payload.to}?adjusted=true&sort=asc&limit=120&apiKey=${API_KEY}`)
+      await axios.get(`${BASE_URL}/aggs/ticker/${payload.symbol}/range/${payload.multiplier}/${payload.timespan}/${payload.from}/${payload.to}?adjusted=true&sort=asc&limit=300&apiKey=${API_KEY}`)
         .then((res) => {
           if(res.status === 200){
             commit('setChartDataOHLCV', res.data)

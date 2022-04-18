@@ -5,7 +5,10 @@
       :width="width"
       :height="height"
       :title-txt="getSymbol"
-      ref="tradingVue">
+      :chart-config="{ MIN_ZOOM: 1 }"
+      :toolbar="true"
+      :overlays="overlays"
+      ref="tvjs">
   </trading-vue>
 <!--  <trading-vue-->
 <!--      :data="chart"-->
@@ -45,6 +48,8 @@ import Data from '../../../data/data.json'
 import DataCube from '../../helpers/datacube.js'
 import moment from "moment";
 import { mapGetters } from "vuex";
+import ScriptOverlay from '../../../test/tests/Scripts/EMAx6.vue'
+import BSB from '../../../test/tests/Scripts/BuySellBalance.vue'
 
 
 export default {
@@ -59,7 +64,8 @@ export default {
         colorBack: '#fff',
         colorGrid: '#eee',
         colorText: '#333',
-      }
+      },
+      overlays: [ScriptOverlay, BSB],
     };
   },
   computed: {
@@ -68,6 +74,12 @@ export default {
     }),
     getSymbol(){
       return this.$route.query.symbol
+    }
+  },
+  watch: {
+    $route(){
+      this.$refs.tvjs.resetChart()
+      this.fetchChartData()
     }
   },
   async mounted() {
@@ -87,13 +99,16 @@ export default {
       if(this.$route.query.symbol){
         await this.$store.dispatch('fetchChartData', {
           symbol: this.$route.query.symbol,
-          multiplier: '4',
+          multiplier: '1',
           timespan: 'hour',
-          from: today,
+          from: '2021-01-01',
           to: today
         })
       }
-    }
+    },
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize)
   },
   // name: 'DataHelper',
   // icon: '⚡',
