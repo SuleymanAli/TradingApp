@@ -71,7 +71,7 @@ export default {
         offchart: []
       }),
       stream: null,
-      renderer: 0
+      renderer: 0,
     };
   },
   computed: {
@@ -93,11 +93,23 @@ export default {
     window.addEventListener('resize', this.onResize)
 
     await this.fetchChartData()
+    window.dc = this.chart      // Debug
+    window.tv = this.$refs.tvjs // Debug
+
+    let vm = this
 
     // socket
     this.stream = new Stream();
-    this.stream.subscribe('A.*')
+    this.stream.subscribe('A.' + this.getSymbol)
     this.stream.ontrades = this.on_trades
+
+    
+    // setTimeout(() => {
+    //   console.log('working')
+    //   this.chart.update({
+    //     candle: [8750, 8900, 8700, 8800, 1688]
+    //   })
+    // }, 5000)
   },
   methods: {
     async fetchChartData(){
@@ -121,6 +133,15 @@ export default {
       this.width = document.querySelector('.chart').clientWidth
       this.height = document.querySelector('.chart').clientHeight
     },
+    on_trades(trade) {
+      if(trade){
+        trade.forEach(item => {
+          this.chart.update({
+            candle: [item.s, item.o, item.h, item.l, item.c, item.v]
+          })
+        })
+      }
+    }
   },
 
   // watch: {
