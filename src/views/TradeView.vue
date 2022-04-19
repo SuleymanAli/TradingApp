@@ -21,13 +21,6 @@ export default {
   data: () => ({
     stream: null,
   }),
-  watch: {
-    $route(){
-      if(this.$route.query.symbol) {
-        this.$store.dispatch('fetchTickerRangeData', this.$route.query.symbol)
-      }
-    }
-  },
   mounted() {
     this.stream = new Stream();
     this.stream.subscribe('A.*')

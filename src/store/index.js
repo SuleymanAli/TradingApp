@@ -20,26 +20,27 @@ export default new Vuex.Store({
     losers: [],
 
     groupedDaily: {},
-    chart_data: {
-      ohlcv: [],
-      onchart: [],
-      offchart: [],
-      tools: [
-        {
-          "type": "Cursor",
-          "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAxQTFRFAAAATU1NTU1NTU1NwlMHHwAAAAR0Uk5TAOvhxbpPrUkAAAAkSURBVHicY2BgYHBggAByabxg1WoGBq2pRCk9AKUbcND43AEAufYHlSuusE4AAAAASUVORK5CYII="
-        },
-        {
-          "type": "LineToolSegment",
-          "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAlQTFRFAAAATU1NJCQkCxcHIQAAAAN0Uk5TAP8SmutI5AAAACxJREFUeJxjYMACGAMgNAsLdpoVKi8AVe8A1QblQlWRKt0AoULw2w1zGxoAABdiAviQhF/mAAAAAElFTkSuQmCC"
-        },
-        {
-          "type": "LineToolExtended",
-          "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAQMAAAD+JxcgAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAATU1NkJ+rOQAAAAJ0Uk5TAP9bkSK1AAAANElEQVR4nGNggABGEMEEIlhABAeI+AASF0AlHmAqA4kzKAAx8wGQuAMKwd6AoYzBAWonAwAcLwTgNfJ3RQAAAABJRU5ErkJggg=="
-        }
-      ],
-      tool: "Cursor"
-    }
+    // chart_data: {
+    //   ohlcv: [],
+    //   onchart: [],
+    //   offchart: [],
+    //   tools: [
+    //     {
+    //       "type": "Cursor",
+    //       "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAxQTFRFAAAATU1NTU1NTU1NwlMHHwAAAAR0Uk5TAOvhxbpPrUkAAAAkSURBVHicY2BgYHBggAByabxg1WoGBq2pRCk9AKUbcND43AEAufYHlSuusE4AAAAASUVORK5CYII="
+    //     },
+    //     {
+    //       "type": "LineToolSegment",
+    //       "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAlQTFRFAAAATU1NJCQkCxcHIQAAAAN0Uk5TAP8SmutI5AAAACxJREFUeJxjYMACGAMgNAsLdpoVKi8AVe8A1QblQlWRKt0AoULw2w1zGxoAABdiAviQhF/mAAAAAElFTkSuQmCC"
+    //     },
+    //     {
+    //       "type": "LineToolExtended",
+    //       "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAQMAAAD+JxcgAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAATU1NkJ+rOQAAAAJ0Uk5TAP9bkSK1AAAANElEQVR4nGNggABGEMEEIlhABAeI+AASF0AlHmAqA4kzKAAx8wGQuAMKwd6AoYzBAWonAwAcLwTgNfJ3RQAAAABJRU5ErkJggg=="
+    //     }
+    //   ],
+    //   tool: "Cursor"
+    // }
+    chart_OHLCV: []
   },
   getters: {
     getTickerData(state) {
@@ -64,6 +65,9 @@ export default new Vuex.Store({
     },
     getChartData(state) {
       return state.chart_data;
+    },
+    getChartOHLCV(state) {
+      return state.chart_OHLCV;
     },
   },
   mutations: {
@@ -104,10 +108,20 @@ export default new Vuex.Store({
         }
       }
     },
+    // setChartDataOHLCV(state, payload){
+    //   let data = payload.results;
+    //   if(data && data.length > 0){
+    //     state.chart_data.ohlcv = data.map((obj) => {
+    //       return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
+    //     });
+    //   }
+    // },
+
+
     setChartDataOHLCV(state, payload){
       let data = payload.results;
       if(data && data.length > 0){
-        state.chart_data.ohlcv = data.map((obj) => {
+        state.chart_OHLCV = data.map((obj) => {
           return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
         });
       }
@@ -160,7 +174,7 @@ export default new Vuex.Store({
         .catch((e) => console.log(e));
     },
     async fetchChartData({commit}, payload){
-      await axios.get(`${BASE_URL}/aggs/ticker/${payload.symbol}/range/${payload.multiplier}/${payload.timespan}/${payload.from}/${payload.to}?adjusted=true&sort=asc&limit=300&apiKey=${API_KEY}`)
+      await axios.get(`${BASE_URL}/aggs/ticker/${payload.symbol}/range/${payload.multiplier}/${payload.timespan}/${payload.from}/${payload.to}?adjusted=false&sort=asc&limit=50000&apiKey=${API_KEY}`)
         .then((res) => {
           if(res.status === 200){
             commit('setChartDataOHLCV', res.data)
