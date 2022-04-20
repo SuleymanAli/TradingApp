@@ -1,7 +1,6 @@
 <template>
   <!-- Real time data example -->
   <trading-vue
-      :key="renderer"
       :data="chart"
       :width="width"
       :height="height"
@@ -50,8 +49,6 @@ import moment from "moment";
 import { mapGetters } from "vuex";
 import Stream from "../../helpers/stream";
 
-
-
 export default {
   components: {
     TradingVue
@@ -65,13 +62,8 @@ export default {
         colorGrid: '#eee',
         colorText: '#333',
       },
-      chart: new DataCube({
-        chart: {},
-        onchart: [],
-        offchart: []
-      }),
+      chart: {},
       stream: null,
-      renderer: 0,
     };
   },
   computed: {
@@ -84,50 +76,45 @@ export default {
   },
   watch: {
     $route(){
-      this.$refs.tvjs.resetChart();
-      this.fetchChartData();
+      this.fetchChartData()
     }
   },
   async mounted() {
     this.onResize()
     window.addEventListener('resize', this.onResize)
-
     await this.fetchChartData()
-    window.dc = this.chart      // Debug
-    window.tv = this.$refs.tvjs // Debug
-
-    let vm = this
-
-    // socket
-    this.stream = new Stream();
-    this.stream.subscribe('A.' + this.getSymbol)
-    this.stream.ontrades = this.on_trades
-
-    
-    // setTimeout(() => {
-    //   console.log('working')
-    //   this.chart.update({
-    //     candle: [8750, 8900, 8700, 8800, 1688]
-    //   })
-    // }, 5000)
   },
   methods: {
     async fetchChartData(){
       const today = moment().format("YYYY-MM-DD");
-      // const yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD");
+      this.load_chunk(['2021-01-01', today]).then(data => {
+        this.chart = new DataCube({
+          ohlcv: data,
+          onchart: [],
+          offchart: [],
+          datasets: []
+        }, { aggregation: 100 })
+        // Register onrange callback & And a stream of trades
+        this.chart.onrange(this.load_chunk)
+        this.$refs.tvjs.resetChart()
+        this.stream = new Stream();
+        this.stream.subscribe('A.' + this.getSymbol)
+        this.stream.ontrades = this.on_trades
 
-      if(this.$route.query.symbol){
-        await this.$store.dispatch('fetchChartData', {
-          symbol: this.$route.query.symbol,
-          multiplier: '4',
-          timespan: 'hour',
-          from: '2021-01-01',
-          to: today
-        })
-
-        this.chart.set('chart.data', this.chart_data)
-        this.renderer++;
-      }
+        window.dc = this.chart      // Debug
+        window.tv = this.$refs.tvjs // Debug
+      })
+    },
+    async load_chunk(range) {
+      let [t1, t2] = range
+      await this.$store.dispatch('fetchChartData', {
+        symbol: this.$route.query.symbol,
+        multiplier: '4',
+        timespan: 'hour',
+        from: t1,
+        to: t2
+      })
+      return this.chart_data
     },
     onResize() {
       this.width = document.querySelector('.chart').clientWidth
@@ -137,7 +124,9 @@ export default {
       if(trade){
         trade.forEach(item => {
           this.chart.update({
-            candle: [item.s, item.o, item.h, item.l, item.c, item.v]
+            // candle: [item.o, item.h, item.l, item.c, item.v],
+            price: item.vw,
+            volume: item.v,
           })
         })
       }
