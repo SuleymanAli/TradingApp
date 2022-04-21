@@ -25,22 +25,6 @@ export default {
     this.stream = new Stream();
     this.stream.subscribe('A.*')
     this.stream.ontrades = this.on_trades
-
-    // let vm = this;
-    // let arr = [
-    //   {sym: "MX", v: 76767, vw: 76.76, o: 15.29, c: 15.17, h: 15.5702, l: 15.1, t: 1649880000000, n: 3253},
-    //   {sym: "LEV", v: 333, vw: 3301, o: 7.38, c: 7.43, h: 7.56, l: 7.3, t: 1649880000000, n: 4262},
-    //   {sym: "AEP", v: 99, vw: 99, o: 102.63, c: 102.25, h: 102.84, l: 101.29, t: 1649880000000,n: 4262},
-    //   {sym: "QD", v: 2222, vw: 444.44, o: 1.15, c: 1.18, h: 1.2, l: 1.14, t: 1649880000000, n: 2247}
-    // ]
-    //
-    // setTimeout(() => {
-    //   arr.forEach(item => {
-    //     setTimeout(() => {
-    //       vm.$store.commit('updateGroupedDaily', item)
-    //     },2000)
-    //   })
-    // },10000)
   },
   methods: {
     on_trades(trade) {

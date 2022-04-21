@@ -58,5 +58,6 @@ export default function Stream(
     off() {
       ws.close(1000);
     },
+    ws
   };
 }
