@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-inner">
     <!-- Real time data example -->
     <trading-vue
         :data="chart"
@@ -11,7 +11,14 @@
         :index-based="true"
         ref="tvjs">
     </trading-vue>
-    <TFSelector :charts="charts"></TFSelector>
+    <TFSelector 
+      :timeframes="time_frames" 
+      selected="4H"
+      v-on:selected="on_selected">
+      </TFSelector>
+      <div class="loading" v-if="loading">
+        <img src="assets/loading.gif" alt="loading">
+      </div>
   </div>
 </template>
 
@@ -22,7 +29,6 @@ import DataCube from '../../helpers/datacube.js'
 import moment from "moment";
 import { mapGetters } from "vuex";
 import Stream from "../../helpers/stream";
-import data_tf from '../../../test/data/data_tf.json'
 
 export default {
   components: {
@@ -39,8 +45,27 @@ export default {
         colorText: '#333',
       },
       chart: {},
-      charts: data_tf,
+      time_frames: [
+        {tf: 'Y', timespan: 'year', multiplier: '1'},
+        {tf: 'M', timespan: 'month', multiplier: '1'},
+        {tf: 'W', timespan: 'week', multiplier: '1'},
+        {tf: 'D', timespan: 'day', multiplier: '1'},
+        {tf: '12H', timespan: 'hour', multiplier: '12'},
+        {tf: '8H', timespan: 'hour', multiplier: '8'},
+        {tf: '4H', timespan: 'hour', multiplier: '4'},
+        {tf: '3H', timespan: 'hour', multiplier: '3'},
+        {tf: '2H', timespan: 'hour', multiplier: '2'},
+        {tf: '1H', timespan: 'hour', multiplier: '1'},
+        {tf: '45M', timespan: 'minute', multiplier: '45'},
+        {tf: '30M', timespan: 'minute', multiplier: '30'},
+        {tf: '15M', timespan: 'minute', multiplier: '15'},
+        {tf: '5M', timespan: 'minute', multiplier: '5'},
+        {tf: '3M', timespan: 'minute', multiplier: '3'},
+        {tf: '1M', timespan: 'minute', multiplier: '1'},
+      ],
+      selected_tf: {tf: '4H', timespan: 'hour', multiplier: '4'},
       stream: null,
+      loading: false
     };
   },
   computed: {
@@ -55,22 +80,21 @@ export default {
     $route(newVal,oldVal){
       this.stream.ws.send(JSON.stringify({action: 'unsubscribe', params: 'A.' + oldVal.query.symbol}))
       this.stream.ws.send(JSON.stringify({action: 'subscribe', params: 'A.' + newVal.query.symbol}))
-      this.fetchChartData()
+      this.fetchChartData(this.selected_tf)
     }
   },
-  async mounted() {
+  mounted() {
     this.onResize()
     window.addEventListener('resize', this.onResize)
-    await this.fetchChartData()
 
     this.stream = new Stream();
     this.stream.subscribe('A.' + this.getSymbol)
     this.stream.ontrades = this.on_trades
   },
   methods: {
-    async fetchChartData(){
+    async fetchChartData(tf){
       const today = moment().format("YYYY-MM-DD");
-      this.load_chunk(['2021-01-01', today]).then(data => {
+      this.load_chunk(['2021-01-01', today], tf).then(data => {
         this.chart = new DataCube({
           ohlcv: data,
           onchart: [],
@@ -85,16 +109,23 @@ export default {
         window.tv = this.$refs.tvjs // Debug
       })
     },
-    async load_chunk(range) {
+    async load_chunk(range, tf) {
+      this.loading = true;
       let [t1, t2] = range
-      await this.$store.dispatch('fetchChartData', {
-        symbol: this.$route.query.symbol,
-        multiplier: '4',
-        timespan: 'hour',
-        from: t1,
-        to: t2
-      })
-      return this.chart_data
+      try {
+        await this.$store.dispatch('fetchChartData', {
+          symbol: this.$route.query.symbol,
+          multiplier: tf.multiplier,
+          timespan: tf.timespan,
+          from: t1,
+          to: t2
+        })
+        this.loading = false;
+        return this.chart_data
+      }
+      catch(e){
+        this.loading = false;
+      }
     },
     onResize() {
       this.width = document.querySelector('.chart').clientWidth
@@ -110,6 +141,13 @@ export default {
           })
         })
       }
+    },
+    on_selected(tf) {
+      this.selected_tf = tf
+      this.fetchChartData(this.selected_tf)
+      // this.chart.set('chart.data', this.charts[tf.name])
+      // this.$refs.tradingVue.resetChart()
+      // this.log_scale = false
     }
   },
   beforeDestroy() {
@@ -122,5 +160,29 @@ export default {
 .trading-vue-js {
   width: 100% !important;
   height: 100% !important;
+}
+
+.chart-inner {
+  position: relative;
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0,0,0,.6);
+}
+
+.loading img {
+  width: 60px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%, -50%);
 }
 </style>

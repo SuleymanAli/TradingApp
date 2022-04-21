@@ -87,7 +87,7 @@ export default {
 }
 
 .loading img {
-  width: 80px;
+  width: 60px;
   position: absolute;
   top: 15%;
   left: 50%;

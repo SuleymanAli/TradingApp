@@ -1,10 +1,10 @@
 <template>
 <!-- Timeframe Selector -->
 <div class="tf-selector">
-    <span class="timeframe" v-for="(tf, i) in this.timeframes"
+    <span class="timeframe" v-for="(tf, i) in timeframes"
         v-on:click="on_click(tf, i)"
-        v-bind:style= "selected === i ? {color: '#44c767'} : {}">
-        {{tf}}
+        v-bind:style= "selected_tf === tf.tf ? {color: '#44c767'} : {}">
+        {{tf.tf}}
     </span>
 </div>
 </template>
@@ -12,30 +12,31 @@
 <script>
 export default {
     name: 'TfSelector',
-    props: ['charts'],
-    mounted() {
-        this.$emit('selected', {
-            name: this.timeframes[this.selected],
-            i: this.selected
-        })
+    props: {
+        timeframes: {
+            type: Array,
+            default: []
+        },
+        selected: {
+            type: String,
+            default: '4H'
+        }
     },
-    computed: {
-        timeframes() {
-            return Object.keys(this.$props.charts)
+    mounted() {
+        if(this.timeframes && this.timeframes.length > 0){
+            let tf = this.timeframes.find(item => item.tf === this.selected_tf)
+            this.$emit('selected', tf)
         }
     },
     methods: {
         on_click(tf, i) {
-            this.selected = i
-            this.$emit('selected', {
-                name: this.timeframes[this.selected],
-                i: this.selected
-            })
+            this.selected_tf = tf.tf
+            this.$emit('selected', tf)
         }
     },
     data() {
         return {
-            selected: 0
+            selected_tf: this.selected
         }
     }
 }
