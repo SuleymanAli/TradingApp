@@ -9,21 +9,23 @@
         :chart-config="{ MIN_ZOOM: 1 }"
         :toolbar="false"
         :index-based="true"
+        :overlays="overlays"
         ref="tvjs">
     </trading-vue>
     <TFSelector 
       :timeframes="time_frames" 
       selected="4H"
       v-on:selected="on_selected">
-      </TFSelector>
-      <div class="loading" v-if="loading">
-        <img src="assets/loading.gif" alt="loading">
-      </div>
+    </TFSelector>
+    <div class="loading" v-if="loading">
+      <img src="assets/loading.gif" alt="loading">
+    </div>
   </div>
 </template>
 
 <script>
 import TradingVue from "../../TradingVue.vue";
+import Overlays from 'tvjs-overlays'
 import TFSelector from "../TFSelector.vue";
 import DataCube from '../../helpers/datacube.js'
 import moment from "moment";
@@ -45,6 +47,7 @@ export default {
         colorText: '#333',
       },
       chart: {},
+      overlays: [Overlays['RSI']],
       time_frames: [
         {tf: 'Y', timespan: 'year', multiplier: '1'},
         {tf: 'M', timespan: 'month', multiplier: '1'},
@@ -98,7 +101,14 @@ export default {
         this.chart = new DataCube({
           ohlcv: data,
           onchart: [],
-          offchart: [],
+          offchart: [
+            // {
+            //   name: "Relative Strength Index",
+            //   type: "RSI",
+            //   data: [],
+            //   settings: {}
+            // }
+          ],
           datasets: []
         }, { aggregation: 100 })
         // Register onrange callback & And a stream of trades
@@ -145,9 +155,6 @@ export default {
     on_selected(tf) {
       this.selected_tf = tf
       this.fetchChartData(this.selected_tf)
-      // this.chart.set('chart.data', this.charts[tf.name])
-      // this.$refs.tradingVue.resetChart()
-      // this.log_scale = false
     }
   },
   beforeDestroy() {

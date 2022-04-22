@@ -87,10 +87,10 @@ export default {
   }
 
   td.green {
-    color: #4caf50;
+    color: #63df89;
   }
 
   td.red {
-    color: #f44336;
+    color: #ec4662;
   }
 </style>
