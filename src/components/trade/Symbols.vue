@@ -63,13 +63,6 @@ export default {
 </script>
 
 <style scoped>
-.list-group {
-  cursor: pointer;
-  width: 50vw;
-  height: 50vh;
-  overflow-y: scroll;
-}
-
 .table thead th {
   position: sticky;
   top: 0;

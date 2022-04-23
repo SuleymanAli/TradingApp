@@ -37,21 +37,15 @@ const updateGroupedDaily = function(state, payload){
     let stockIndex = state.groupedDaily.results.findIndex(stock => stock.T === payload.sym);
 
     if(stockIndex !== -1){
+      Vue.set(state.groupedDaily.results[stockIndex],'o',payload.o);
+      Vue.set(state.groupedDaily.results[stockIndex],'h',payload.h);
+      Vue.set(state.groupedDaily.results[stockIndex],'l',payload.l);
+      Vue.set(state.groupedDaily.results[stockIndex],'c',payload.c);
       Vue.set(state.groupedDaily.results[stockIndex],'vw',payload.vw);
       Vue.set(state.groupedDaily.results[stockIndex],'v',payload.v);
     }
   }
 }
-
-// const setChartDataOHLCV = function(state, payload){
-//   let data = payload.results;
-//   if(data && data.length > 0){
-//     state.chart_data.ohlcv = data.map((obj) => {
-//       return [obj.t, obj.o, obj.h, obj.l, obj.c, obj.v];
-//     });
-//   }
-// },
-
 
 const setChartDataOHLCV = function(state, payload){
   let data = payload.results;
@@ -70,6 +64,5 @@ export default {
   setLosers,
   setGroupedDaily,
   updateGroupedDaily,
-  // setChartDataOHLCV,
   setChartDataOHLCV
 }

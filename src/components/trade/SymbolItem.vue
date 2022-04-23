@@ -86,6 +86,10 @@ export default {
     cursor: pointer;
   }
 
+  td {
+    font-size: 14px;
+  }
+
   td.green {
     color: #63df89;
   }

@@ -112,7 +112,7 @@ export default {
           datasets: []
         }, { aggregation: 100 })
         // Register onrange callback & And a stream of trades
-        this.chart.onrange(this.load_chunk)
+        // this.chart.onrange(this.load_chunk)
         this.$refs.tvjs.resetChart()
 
         window.dc = this.chart      // Debug

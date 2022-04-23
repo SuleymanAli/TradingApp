@@ -44,16 +44,28 @@ export default {
 <style lang="scss" scoped>
 .inner-layout {
   color: #fff;
-  height: 100vh;
   display: flex;
-  overflow: hidden;
   background-color: #212529;
 
+  @media(min-width: 768px){
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  @media(max-width: 767px){
+    flex-direction: column-reverse;
+  }
+
   .sidebar {
-    width: 300px;
+    height: 35vh;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
+
+    @media(min-width: 768px){
+      height: auto;
+      width: 280px;
+    }
 
     &::-webkit-scrollbar {
       width: 5px;
@@ -71,8 +83,13 @@ export default {
   }
 
   .chart {
+    height: 65vh;
     overflow: hidden;
-    width: calc(100% - 300px);
+
+    @media(min-width: 768px){
+      height: auto;
+      width: calc(100% - 280px);
+    }
   }
 }
 </style>
