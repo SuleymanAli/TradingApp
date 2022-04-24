@@ -1,6 +1,6 @@
 <template>
 <!-- Timeframe Selector -->
-<div class="tf-selector">
+<div class="tf-selector" v-if="timeframes && timeframes.length > 0">
     <!-- <span class="timeframe" v-for="(tf, i) in timeframes"
         v-on:click="on_click(tf, i)"
         v-bind:style= "selected_tf === tf.tf ? {color: '#44c767'} : {}">

@@ -10,6 +10,8 @@
         :toolbar="false"
         :index-based="true"
         :overlays="overlays"
+        :legend-buttons="['display', 'up', 'down', 'remove']"
+        @legend-button-click="legendAction"
         ref="tvjs">
     </trading-vue>
     <TFSelector 
@@ -31,6 +33,7 @@ import DataCube from '../../helpers/datacube.js'
 import moment from "moment";
 import { mapGetters } from "vuex";
 import Stream from "../../helpers/stream";
+import LegendController from "../../helpers/legend_controller";
 
 export default {
   components: {
@@ -47,7 +50,7 @@ export default {
         colorText: '#333',
       },
       chart: {},
-      overlays: [Overlays['RSI']],
+      overlays: [Overlays['RSI'], Overlays['Stoch']],
       time_frames: [
         {tf: 'Y', timespan: 'year', multiplier: '1'},
         {tf: 'M', timespan: 'month', multiplier: '1'},
@@ -102,12 +105,18 @@ export default {
           ohlcv: data,
           onchart: [],
           offchart: [
-            // {
-            //   name: "Relative Strength Index",
-            //   type: "RSI",
-            //   data: [],
-            //   settings: {}
-            // }
+            {
+              name: "Relative Strength Index",
+              type: "RSI",
+              data: [],
+              settings: {}
+            },
+            {
+              name: "Stochastic",
+              type: "Stoch",
+              data: [],
+              settings: {}
+          }
           ],
           datasets: []
         }, { aggregation: 100 })
@@ -155,7 +164,11 @@ export default {
     on_selected(tf) {
       this.selected_tf = tf
       this.fetchChartData(this.selected_tf)
-    }
+    },
+    legendAction(e){
+      let legend = new LegendController(this.chart.tv, this.chart)
+      legend.onbutton(e)
+    },
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.onResize)
