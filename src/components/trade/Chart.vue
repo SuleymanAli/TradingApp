@@ -50,7 +50,7 @@ export default {
         colorText: '#333',
       },
       chart: {},
-      overlays: [Overlays['RSI'], Overlays['Stoch']],
+      overlays: [Overlays['RSI'], Overlays['Stoch'], Overlays['EMA']],
       time_frames: [
         {tf: 'Y', timespan: 'year', multiplier: '1'},
         {tf: 'M', timespan: 'month', multiplier: '1'},
@@ -103,7 +103,62 @@ export default {
       this.load_chunk(['2021-01-01', today], tf).then(data => {
         this.chart = new DataCube({
           ohlcv: data,
-          onchart: [],
+          onchart: [
+            {
+              name: "EMA, 3",
+              type: "EMA",
+              data: [],
+              settings: {
+                  color: "#f7890c",
+                  length: 3
+              }
+            },
+            {
+              name: "EMA, 8",
+              type: "EMA",
+              data: [],
+              settings: {
+                  color: "red",
+                  length: 8
+              }
+            },
+            {
+              name: "EMA, 20",
+              type: "EMA",
+              data: [],
+              settings: {
+                  color: "blue",
+                  length: 20
+              }
+            },
+            {
+              name: "EMA, 50",
+              type: "EMA",
+              data: [],
+              settings: {
+                  color: "yellow",
+                  length: 50
+              }
+            },
+            {
+              name: "EMA, 100",
+              type: "EMA",
+              data: [],
+              settings: {
+                  color: "brown",
+                  length: 100
+              }
+            },
+            {
+              name: "EMA, 200",
+              type: "EMA",
+              data: [],
+              settings: {
+                  color: "green",
+                  length: 200
+              }
+            },
+          ],
           offchart: [
             {
               name: "Relative Strength Index",
@@ -116,7 +171,7 @@ export default {
               type: "Stoch",
               data: [],
               settings: {}
-          }
+            }
           ],
           datasets: []
         }, { aggregation: 100 })

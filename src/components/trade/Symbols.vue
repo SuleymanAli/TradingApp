@@ -1,6 +1,6 @@
 <template>
   <div class="trade__list h-100">
-    <div class="trade__list-inner" v-if="stocks && stocks.length > 0">
+    <div class="trade__list-inner" v-if="stocks && stocks.results && stocks.results.length > 0">
       <table class="table table-dark mb-0">
         <thead>
         <tr>
