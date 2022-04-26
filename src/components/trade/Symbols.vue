@@ -1,6 +1,6 @@
 <template>
   <div class="trade__list h-100">
-    <div class="trade__list-inner" v-if="stocks && stocks.results && stocks.results.length > 0">
+    <div class="trade__list-inner">
       <table class="table table-dark mb-0">
         <thead>
         <tr>
@@ -22,10 +22,10 @@
         <img src="assets/loading.gif" alt="loading">
       </div>
     </div>
-    <div class="empty-area" v-else>
-      <EmptyIcon color="#fff" width="60px" height="60px" />
-      <p>No data...</p>
-    </div>
+<!--    <div class="empty-area" v-else>-->
+<!--      <EmptyIcon color="#fff" width="60px" height="60px" />-->
+<!--      <p>No data...</p>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -55,7 +55,7 @@ export default {
     this.loading = true
     let yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD")
     try {
-      await this.$store.dispatch('fetchGroupedDaily',{date: today}) //'2022-04-14'
+      await this.$store.dispatch('fetchGroupedDaily',{date: yesterday}) //'2022-04-14'
       this.loading = false
     }
     catch (e){

@@ -202,8 +202,8 @@ export default {
       }
     },
     onResize() {
-      this.width = document.querySelector('.chart').clientWidth
-      this.height = document.querySelector('.chart').clientHeight
+      this.width = document.querySelector('.chart-inner').clientWidth
+      this.height = document.querySelector('.chart-inner').clientHeight
     },
     on_trades(trade) {
       if(trade){
@@ -238,6 +238,7 @@ export default {
 }
 
 .chart-inner {
+  height: inherit;
   position: relative;
 }
 
@@ -259,5 +260,11 @@ export default {
   top: 40%;
   left: 50%;
   transform: translateX(-50%, -50%);
+}
+
+@media (min-width: 768px){
+  .chart-inner {
+    width: calc(100% - 200px);
+  }
 }
 </style>

@@ -4,8 +4,9 @@
       <div class="sidebar">
         <Symbols />
       </div>
-      <div class="chart">
+      <div class="content-area">
         <Chart />
+        <Quotes />
       </div>
     </div>
   </div>
@@ -13,11 +14,12 @@
 
 <script>
 import Chart from '../components/trade/Chart.vue'
+import Quotes from '../components/trade/Quotes.vue'
 import Symbols from '../components/trade/Symbols.vue'
 import Stream from "../helpers/stream";
 
 export default {
-  components: { Chart, Symbols },
+  components: { Chart, Symbols, Quotes },
   data: () => ({
     stream: null,
   }),
@@ -82,12 +84,13 @@ export default {
     }
   }
 
-  .chart {
+  .content-area {
     height: 65vh;
-    overflow: hidden;
 
     @media(min-width: 768px){
+      display: flex;
       height: auto;
+      overflow: hidden;
       width: calc(100% - 280px);
     }
   }
