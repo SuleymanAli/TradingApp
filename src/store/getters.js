@@ -31,8 +31,8 @@ const getChartOHLCV = function(state) {
   return state.chart_OHLCV;
 }
 
-const getQuotes = function(state) {
-  return state.quotes;
+const getQuote = function(state) {
+  return state.quote;
 }
 
 export default {
@@ -44,5 +44,5 @@ export default {
   getGroupedDaily,
   getChartData,
   getChartOHLCV,
-  getQuotes
+  getQuote
 }

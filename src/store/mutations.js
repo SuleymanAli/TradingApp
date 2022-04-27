@@ -56,8 +56,21 @@ const setChartDataOHLCV = function(state, payload){
   }
 }
 
-const setQuotes = function(state, payload) {
-  state.quotes = payload;
+const setQuote = function(state, payload) {
+  state.quote = payload;
+}
+
+const updateQuote = function(state, payload) {
+  let quote = state.quote
+  if(quote && quote.results){
+    if(payload.sym){
+      quote.results.P = payload.bp // bid price
+      quote.results.s = payload.bs // bid size
+
+      quote.results.p = payload.ap // ask price
+      quote.results.S = payload.as // ask size
+    }
+  }
 }
 
 export default {
@@ -69,5 +82,6 @@ export default {
   setGroupedDaily,
   updateGroupedDaily,
   setChartDataOHLCV,
-  setQuotes
+  setQuote,
+  updateQuote
 }

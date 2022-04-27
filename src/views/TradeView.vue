@@ -5,15 +5,14 @@
         <Symbols
             :data="stocks"
             :loading="s_loading"
-            @change-symbol="fetchQuotes"
         />
       </div>
       <div class="content-area">
         <Chart />
-        <Quotes
-            :data="quotes"
-            :loading="q_loading"
-        />
+<!--        <Quotes-->
+<!--            :data="quotes"-->
+<!--            :loading="q_loading"-->
+<!--        />-->
       </div>
     </div>
   </div>
@@ -36,8 +35,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      stocks: 'getGroupedDaily',
-      quotes: 'getQuotes'
+      stocks: 'getGroupedDaily'
     }),
   },
   async mounted() {
@@ -45,7 +43,6 @@ export default {
     this.stream.subscribe('A.*')
     this.stream.ontrades = this.on_trades
 
-    await this.fetchQuotes()
     await this.fetchSymbols()
   },
   methods: {
@@ -66,16 +63,6 @@ export default {
       }
       catch (e){
         this.s_loading = false
-      }
-    },
-    async fetchQuotes(){
-      this.q_loading = true
-      try {
-        await this.$store.dispatch('fetchQuotes', {symbol: this.$route.query.symbol})
-        this.q_loading = false
-      }
-      catch (e){
-        this.q_loading = false
       }
     }
   },

@@ -12,5 +12,5 @@ export default {
   // sarkhan edit
   groupedDaily: {},
   chart_OHLCV: [],
-  quotes: {}
+  quote: {}
 }

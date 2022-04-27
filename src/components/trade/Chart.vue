@@ -19,6 +19,9 @@
       selected="4H"
       v-on:selected="on_selected">
     </TFSelector>
+    <Quote
+      :data="quote.results"
+    />
     <div class="loading" v-if="loading">
       <img src="assets/loading.gif" alt="loading">
     </div>
@@ -29,6 +32,7 @@
 import TradingVue from "../../TradingVue.vue";
 import Overlays from 'tvjs-overlays'
 import TFSelector from "../TFSelector.vue";
+import Quote from "../Quote.vue";
 import DataCube from '../../helpers/datacube.js'
 import moment from "moment";
 import { mapGetters } from "vuex";
@@ -38,7 +42,8 @@ import LegendController from "../../helpers/legend_controller";
 export default {
   components: {
     TradingVue,
-    TFSelector
+    TFSelector,
+    Quote
   },
   data() {
     return {
@@ -71,12 +76,14 @@ export default {
       ],
       selected_tf: {tf: '4H', timespan: 'hour', multiplier: '4'},
       stream: null,
+      q_stream: null,
       loading: false
     };
   },
   computed: {
     ...mapGetters({
-      chart_data: 'getChartOHLCV'
+      chart_data: 'getChartOHLCV',
+      quote: 'getQuote'
     }),
     getSymbol(){
       return this.$route.query.symbol
@@ -84,23 +91,32 @@ export default {
   },
   watch: {
     getSymbol(newVal,oldVal){
-      this.stream.ws.send(JSON.stringify({action: 'unsubscribe', params: 'A.' + oldVal}))
-      this.stream.ws.send(JSON.stringify({action: 'subscribe', params: 'A.' + newVal}))
+      this.stream.sendUnSubscriptions('A.' + oldVal)
+      this.stream.sendSubscriptions('A.' + newVal)
       this.fetchChartData(this.selected_tf)
+
+      this.q_stream.sendUnSubscriptions('Q.' + oldVal)
+      this.q_stream.sendSubscriptions('Q.' + newVal)
+      this.fetchQuotes()
     }
   },
-  mounted() {
+  async mounted() {
     this.onResize()
     window.addEventListener('resize', this.onResize)
 
     this.stream = new Stream();
     this.stream.subscribe('A.' + this.getSymbol)
     this.stream.ontrades = this.on_trades
+
+    await this.fetchQuotes()
+    this.q_stream = new Stream();
+    this.q_stream.subscribe('Q.' + this.getSymbol)
+    this.q_stream.ontrades = this.q_on_trades
   },
   methods: {
     async fetchChartData(tf){
       const today = moment().format("YYYY-MM-DD");
-      this.load_chunk(['2021-01-01', today], tf).then(data => {
+      this.load_chunk(['2021-05-01', today], tf).then(data => {
         this.chart = new DataCube({
           ohlcv: data,
           onchart: [
@@ -202,8 +218,8 @@ export default {
       }
     },
     onResize() {
-      this.width = document.querySelector('.chart-inner').clientWidth
-      this.height = document.querySelector('.chart-inner').clientHeight
+      this.width = document.querySelector('.content-area').clientWidth
+      this.height = document.querySelector('.content-area').clientHeight
     },
     on_trades(trade) {
       if(trade){
@@ -223,6 +239,21 @@ export default {
     legendAction(e){
       let legend = new LegendController(this.chart.tv, this.chart)
       legend.onbutton(e)
+    },
+    async fetchQuotes(){
+      this.q_loading = true
+      try {
+        await this.$store.dispatch('fetchQuotes', {symbol: this.$route.query.symbol})
+        this.q_loading = false
+      }
+      catch (e){
+        this.q_loading = false
+      }
+    },
+    q_on_trades(trade) {
+      if(trade && trade.length > 0){
+        this.$store.commit('updateQuote', trade[0])
+      }
     },
   },
   beforeDestroy() {
@@ -262,9 +293,13 @@ export default {
   transform: translateX(-50%, -50%);
 }
 
-@media (min-width: 768px){
-  .chart-inner {
-    width: calc(100% - 200px);
-  }
+.chart-inner >>> .trading-vue-ohlcv {
+  padding-bottom: 35px;
 }
+
+/*@media (min-width: 768px){*/
+/*  .chart-inner {*/
+/*    width: calc(100% - 200px);*/
+/*  }*/
+/*}*/
 </style>

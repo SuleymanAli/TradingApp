@@ -48,6 +48,14 @@ export default function Stream(
     };
   };
 
+  var sendSubscriptions = ( subscription ) => {
+    ws.send(`{"action":"subscribe","params":"${subscription}"}`)
+  };
+
+  var sendUnSubscriptions = ( subscription ) => {
+    ws.send(`{"action":"unsubscribe","params":"${subscription}"}`)
+  }
+
   // 5.Result
   return {
     set ontrades(val) {
@@ -55,9 +63,10 @@ export default function Stream(
     },
     unsubscribe,
     subscribe,
+    sendSubscriptions,
+    sendUnSubscriptions,
     off() {
       ws.close(1000);
     },
-    ws
   };
 }

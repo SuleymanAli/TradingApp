@@ -62,10 +62,10 @@ const fetchChartData = async function({commit}, payload){
 }
 
 const fetchQuotes = async function({commit}, payload){
-  await axios.get(`${BASE_URL}/v3/quotes/${payload.symbol}?apiKey=${API_KEY}`)
+  await axios.get(`${BASE_URL}/v2/last/nbbo/${payload.symbol}?apiKey=${API_KEY}`)
     .then((res) => {
       if(res.status === 200){
-        commit('setQuotes', res.data)
+        commit('setQuote', res.data)
       }
     })
     .catch((e) => console.log(e));

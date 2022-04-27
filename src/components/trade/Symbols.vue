@@ -10,8 +10,19 @@
         </tr>
         </thead>
         <tbody>
+        <tr class="search-tr">
+          <td colspan="3">
+            <div class="search-area">
+              <input
+                  type="text"
+                  placeholder="Search symbol"
+                  v-model="search_sym"
+              >
+            </div>
+          </td>
+        </tr>
         <SymbolItem
-            v-for="(stock, index) in data.results"
+            v-for="(stock, index) in symbolList"
             :key="index"
             :stock="stock"
             @change="changeSymbolOnChart(stock.T)"
@@ -50,17 +61,32 @@ export default {
       default: false
     }
   },
+  data(){
+    return {
+      search_sym: ''
+    }
+  },
+  computed: {
+    symbolList(){
+      if(this.data && this.data.results && this.data.results.length > 0){
+        return this.data.results.filter(post => {
+          return post.T.toLowerCase().includes(this.search_sym.toLowerCase())
+        })
+      }
+    }
+  },
   methods: {
     changeSymbolOnChart(symbol) {
       this.$router.push({path: '/trade', query: {symbol}})
       this.$emit('change-symbol', symbol)
-    },
+    }
   },
 }
 </script>
 
 <style scoped>
-.table thead th {
+.table thead th,
+.search-tr {
   position: sticky;
   top: 0;
 }
@@ -97,5 +123,14 @@ export default {
   .empty-area {
     padding: 80px 10px 20px;
   }
+}
+
+.search-area input {
+  padding: 2px 5px;
+  width: 100%;
+  outline: none;
+  color: #ddd;
+  background: #2b2f34;
+  border-color: #41474e;
 }
 </style>

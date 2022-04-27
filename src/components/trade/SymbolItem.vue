@@ -30,52 +30,41 @@ export default {
     calcNetChg(){
       if(this.stock.o && this.stock.vw) return (this.stock.o - this.stock.vw).toFixed(4);
     },
-    clonedNetChg(){
-      if(!isNaN(this.calcNetChg)){
-        return JSON.parse(JSON.stringify(this.calcNetChg))
-      }
-    }
   },
   watch: {
-    clonedStock: {
-      handler(newVal, oldVal){
-        if(newVal.vw >= oldVal.vw){
-          this.price = 'green'
-          setTimeout(() => {
-            this.price = null
-          }, 1500)
-        }
-        else if(newVal.vw <= oldVal.vw){
-          this.price = 'red'
-          setTimeout(() => {
-            this.price = null
-          }, 1500)
-        }
-        else {
+    'stock.vw'(newVal, oldVal){
+      if(newVal >= oldVal){
+        this.price = 'green'
+        setTimeout(() => {
           this.price = null
-        }
-      },
-      deep: true
+        }, 1500)
+      }
+      else if(newVal <= oldVal){
+        this.price = 'red'
+        setTimeout(() => {
+          this.price = null
+        }, 1500)
+      }
+      else {
+        this.price = null
+      }
     },
-    clonedNetChg: {
-      handler(newVal, oldVal){
-        if(newVal >= oldVal){
-          this.net_chg = 'green'
-          setTimeout(() => {
-            this.net_chg = null
-          }, 1500)
-        }
-        else if(newVal <= oldVal){
-          this.net_chg = 'red'
-          setTimeout(() => {
-            this.net_chg = null
-          }, 1500)
-        }
-        else {
+    calcNetChg(newVal, oldVal){
+      if(newVal >= oldVal){
+        this.net_chg = 'green'
+        setTimeout(() => {
           this.net_chg = null
-        }
-      },
-      deep: true
+        }, 1500)
+      }
+      else if(newVal <= oldVal){
+        this.net_chg = 'red'
+        setTimeout(() => {
+          this.net_chg = null
+        }, 1500)
+      }
+      else {
+        this.net_chg = null
+      }
     }
   }
 }
