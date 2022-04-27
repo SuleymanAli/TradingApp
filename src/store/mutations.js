@@ -56,6 +56,10 @@ const setChartDataOHLCV = function(state, payload){
   }
 }
 
+const setQuotes = function(state, payload) {
+  state.quotes = payload;
+}
+
 export default {
   setTickerData,
   changeTickerName,
@@ -64,5 +68,6 @@ export default {
   setLosers,
   setGroupedDaily,
   updateGroupedDaily,
-  setChartDataOHLCV
+  setChartDataOHLCV,
+  setQuotes
 }

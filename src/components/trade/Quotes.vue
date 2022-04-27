@@ -5,10 +5,17 @@
         <span>Ask</span>
       </div>
       <div class="quote-items">
-        <div class="quote-item" v-for="i in 30">
-          <span class="red">444.4</span>
-          <span>0.687</span>
+        <div
+            class="quote-item"
+            v-for="(quote, index) in data.results"
+            :key="index"
+        >
+          <span class="red">{{ quote.ask_price }}</span>
+          <span>{{ quote.ask_size }}</span>
         </div>
+      </div>
+      <div class="loading" v-if="loading">
+        <img src="assets/loading.gif" alt="loading">
       </div>
     </div>
     <div class="quote-bottom">
@@ -16,10 +23,17 @@
         <span>Bid</span>
       </div>
       <div class="quote-items">
-        <div class="quote-item" v-for="i in 30">
-          <span class="green">444.4</span>
-          <span>0.687</span>
+        <div
+            class="quote-item"
+            v-for="(quote, index) in data.results"
+            :key="index"
+        >
+          <span class="green">{{ quote.bid_price }}</span>
+          <span>{{ quote.bid_size }}</span>
         </div>
+      </div>
+      <div class="loading" v-if="loading">
+        <img src="assets/loading.gif" alt="loading">
       </div>
     </div>
   </div>
@@ -27,7 +41,19 @@
 
 <script>
 export default {
-  name: "Quotes"
+  name: "Quotes",
+  props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
@@ -51,6 +77,7 @@ export default {
     width: 50%;
     height: 35vh;
     overflow: hidden;
+    position: relative;
 
     @media (min-width: 768px) {
       width: auto;
@@ -97,5 +124,24 @@ export default {
 
   .red {
     color: #ec4662;
+  }
+
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.6);
+  }
+
+  .loading img {
+    width: 30px;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 </style>

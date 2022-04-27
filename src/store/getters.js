@@ -31,6 +31,10 @@ const getChartOHLCV = function(state) {
   return state.chart_OHLCV;
 }
 
+const getQuotes = function(state) {
+  return state.quotes;
+}
+
 export default {
   getTickerData,
   getTickerName,
@@ -39,5 +43,6 @@ export default {
   getLosers,
   getGroupedDaily,
   getChartData,
-  getChartOHLCV
+  getChartOHLCV,
+  getQuotes
 }

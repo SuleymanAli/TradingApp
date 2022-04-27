@@ -11,7 +11,7 @@
         </thead>
         <tbody>
         <SymbolItem
-            v-for="(stock, index) in stocks.results"
+            v-for="(stock, index) in data.results"
             :key="index"
             :stock="stock"
             @change="changeSymbolOnChart(stock.T)"
@@ -30,41 +30,30 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import moment from "moment";
 import SymbolItem from "./SymbolItem.vue";
-import EmptyIcon from "../../icons/svg/Empty.vue"
+// import EmptyIcon from "../../icons/svg/Empty.vue"
 
 export default {
   components: {
     SymbolItem,
-    EmptyIcon
+    // EmptyIcon
   },
-  data(){
-    return {
-      loading: false
-    }
-  },
-  computed: {
-    ...mapGetters({
-      stocks: 'getGroupedDaily'
-    }),
-  },
-  async mounted() {
-    let today = moment().format("YYYY-MM-DD");
-    this.loading = true
-    let yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD")
-    try {
-      await this.$store.dispatch('fetchGroupedDaily',{date: yesterday}) //'2022-04-14'
-      this.loading = false
-    }
-    catch (e){
-      this.loading = false
+  props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     changeSymbolOnChart(symbol) {
       this.$router.push({path: '/trade', query: {symbol}})
+      this.$emit('change-symbol', symbol)
     },
   },
 }

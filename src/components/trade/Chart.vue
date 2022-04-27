@@ -83,9 +83,9 @@ export default {
     }
   },
   watch: {
-    $route(newVal,oldVal){
-      this.stream.ws.send(JSON.stringify({action: 'unsubscribe', params: 'A.' + oldVal.query.symbol}))
-      this.stream.ws.send(JSON.stringify({action: 'subscribe', params: 'A.' + newVal.query.symbol}))
+    getSymbol(newVal,oldVal){
+      this.stream.ws.send(JSON.stringify({action: 'unsubscribe', params: 'A.' + oldVal}))
+      this.stream.ws.send(JSON.stringify({action: 'subscribe', params: 'A.' + newVal}))
       this.fetchChartData(this.selected_tf)
     }
   },

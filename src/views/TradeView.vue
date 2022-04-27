@@ -2,11 +2,18 @@
   <div class="container-fluid px-0 trade">
     <div class="inner-layout">
       <div class="sidebar">
-        <Symbols />
+        <Symbols
+            :data="stocks"
+            :loading="s_loading"
+            @change-symbol="fetchQuotes"
+        />
       </div>
       <div class="content-area">
         <Chart />
-        <Quotes />
+        <Quotes
+            :data="quotes"
+            :loading="q_loading"
+        />
       </div>
     </div>
   </div>
@@ -17,16 +24,29 @@ import Chart from '../components/trade/Chart.vue'
 import Quotes from '../components/trade/Quotes.vue'
 import Symbols from '../components/trade/Symbols.vue'
 import Stream from "../helpers/stream";
+import moment from "moment";
+import {mapGetters} from "vuex";
 
 export default {
   components: { Chart, Symbols, Quotes },
   data: () => ({
     stream: null,
+    s_loading: false,
+    q_loading: false,
   }),
-  mounted() {
+  computed: {
+    ...mapGetters({
+      stocks: 'getGroupedDaily',
+      quotes: 'getQuotes'
+    }),
+  },
+  async mounted() {
     this.stream = new Stream();
     this.stream.subscribe('A.*')
     this.stream.ontrades = this.on_trades
+
+    await this.fetchQuotes()
+    await this.fetchSymbols()
   },
   methods: {
     on_trades(trade) {
@@ -34,6 +54,28 @@ export default {
         trade.forEach(item => {
           this.$store.commit('updateGroupedDaily', item)
         })
+      }
+    },
+    async fetchSymbols(){
+      // let today = moment().format("YYYY-MM-DD");
+      this.s_loading = true
+      let yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD")
+      try {
+        await this.$store.dispatch('fetchGroupedDaily',{date: yesterday}) //'2022-04-14'
+        this.s_loading = false
+      }
+      catch (e){
+        this.s_loading = false
+      }
+    },
+    async fetchQuotes(){
+      this.q_loading = true
+      try {
+        await this.$store.dispatch('fetchQuotes', {symbol: this.$route.query.symbol})
+        this.q_loading = false
+      }
+      catch (e){
+        this.q_loading = false
       }
     }
   },
